@@ -1,0 +1,11 @@
+package bronze5;
+
+import java.util.Scanner;
+
+public class P20492 {
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		int prize = sc.nextInt();
+		System.out.printf("%.0f %.0f",prize*(1-0.22), prize*0.8 + (prize*0.2)*(1-0.22));
+	}
+}
