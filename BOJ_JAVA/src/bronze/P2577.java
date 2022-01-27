@@ -18,5 +18,8 @@ public class P2577 {
             bw.write(v+ "\n");
         }
 
+        bw.flush();
+        bw.close();
+        br.close();
     }
 }
