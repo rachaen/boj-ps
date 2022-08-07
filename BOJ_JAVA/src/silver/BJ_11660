@@ -1,0 +1,37 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class BJ_11660{
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringBuilder sb = new StringBuilder();
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		int N = Integer.parseInt(st.nextToken()); // 표 크기
+		int M = Integer.parseInt(st.nextToken()); // 횟수
+
+		int[][] table = new int[N + 1][N + 1];
+		int[][] tableSum = new int[N + 1][N + 1];
+		for (int r = 1; r <= N; r++) {
+			st = new StringTokenizer(br.readLine());
+			for (int c = 1; c <= N; c++) {
+				table[r][c] = Integer.parseInt(st.nextToken());
+				tableSum[r][c] = tableSum[r-1][c] + tableSum[r][c-1] - tableSum[r-1][c-1] + table[r][c];
+			}
+		}
+
+		for (int m = 0; m < M; m++) {
+			st = new StringTokenizer(br.readLine());
+			int x1 = Integer.parseInt(st.nextToken());
+			int y1 = Integer.parseInt(st.nextToken());
+			int x2 = Integer.parseInt(st.nextToken());
+			int y2 = Integer.parseInt(st.nextToken());
+
+			
+			sb.append(tableSum[x2][y2]-tableSum[x2][y1-1]-tableSum[x1-1][y2] + tableSum[x1-1][y1-1] + "\n");
+
+		}
+		System.out.println(sb);
+		br.close();
+	}
+}
