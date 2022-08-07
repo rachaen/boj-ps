@@ -1,0 +1,112 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+/**
+ * 
+ * @author 이채은
+ *
+ */
+public class BJ_12891 {
+	/**
+	 * 문자를 카운트하는 함수
+	 * @param s
+	 * @return 문자 개수가 저장된 배열
+	 */
+	public static int[] count(String s) {
+		int[] countArray = new int[4];
+		for (int i = 0; i < s.length(); i++) {
+			switch (s.charAt(i)) {
+			case 'A':
+				countArray[0]++;
+				break;
+			case 'C':
+				countArray[1]++;
+				break;
+
+			case 'G':
+				countArray[2]++;
+				break;
+
+			case 'T':
+				countArray[3]++;
+				break;
+			}
+		}
+		return countArray;
+	}
+	/**
+	 * 각 문자들이 배열에 저장되어야 하는 위치를 리턴하는 함수
+	 * @param c
+	 * @return 문자에 해당하는 인덱스
+	 */
+	public static int order(char c) {
+		switch (c) {
+		case 'A':
+			return 0;
+		case 'C':
+			return 1;
+		case 'G':
+			return 2;
+		case 'T':
+			return 3;
+		}
+		return -1;
+	}
+
+	/**
+	 * 조건에 부합하는 문자열인지 확인하는 함수
+	 * @param pwCount
+	 * @param subCount
+	 * @return 부합하면 true, 부합하지 않으면 false
+	 */
+	public static boolean isOk(int[] pwCount, int[] subCount) {
+		for (int i = 0; i < 4; i++) {
+			if (pwCount[i] > subCount[i]) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+
+		int S = Integer.parseInt(st.nextToken());
+		int P = Integer.parseInt(st.nextToken());
+		/** DNA문자열 */
+		String DNA = br.readLine();
+		/** 정답개수 */
+		int result = 0;
+		st = new StringTokenizer(br.readLine());
+		/** 최소 문자 개수 */
+		int[] pwCount = { Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()),
+				Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()) };
+
+		/** DNA문자열에 각 문자의 개수 */
+		int[] DNACount = count(DNA);
+
+		// 조건에 맞는 문자열을 만들 수 있는지 확인
+		if (!isOk(pwCount, DNACount)) {
+			System.out.println(0);
+			System.exit(0);
+		}
+
+		String sub = DNA.substring(0, P);
+		int[] subCount = count(sub);
+		if (isOk(pwCount, subCount)) {
+			result++;
+		}
+		// 빠진 문자는 빼주고 다음으로 올 문자는 더해준다.
+		for (int i = 1; i <= S - P; i++) {
+			subCount[order(DNA.charAt(i-1))]--;
+			subCount[order(DNA.charAt(P + i - 1))]++;
+			if(isOk(pwCount, subCount)) {
+				result++;
+			}
+		}
+		System.out.println(result);
+	}
+
+}
