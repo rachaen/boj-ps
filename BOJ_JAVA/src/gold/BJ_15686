@@ -1,0 +1,95 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.StringTokenizer;
+
+public class BJ_15686 {
+	static ArrayList<int[]> home;	/** 집 좌표 저장하는 리스트 */
+	static ArrayList<int[]> store;	/** 가게 좌표 저장하는 리스트 */
+	static int[][] distance;	/** 치킨거리 저장하는 리스트 */
+	static int result = Integer.MAX_VALUE;
+	public static void main(String[] args) throws Exception{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		int N = toInteger(st.nextToken());	/** 마을 크기 */
+		int M = toInteger(st.nextToken());	/** 살아남은 치킨가게 수 */
+		int[][] area = new int[N][N];
+		home = new ArrayList<>();
+		store = new ArrayList<>();
+		for(int r = 0; r < N; r++) {
+			st = new StringTokenizer(br.readLine());
+			for(int c = 0; c < N; c++) {
+				area[r][c] = toInteger(st.nextToken());
+				switch(area[r][c]) {
+				case 1:
+					int[] homePoint = {r,c};
+					home.add(homePoint);
+					break;
+				case 2:
+					int[] storePoint = {r,c};
+					store.add(storePoint);
+					break;
+				}
+			}
+		}
+		distance = new int[home.size()][store.size()];
+		for(int r = 0; r < distance.length; r++) {
+			for(int c = 0; c < distance[0].length; c++) {
+				distance[r][c] = Math.abs(home.get(r)[0] - store.get(c)[0]) + Math.abs(home.get(r)[1] - store.get(c)[1]);
+			}
+		}
+		
+		// 조합을 찾는다
+		boolean[] storeVisited = new boolean[store.size()];
+		comb(storeVisited, 0, M);
+		
+		System.out.println(result);
+		
+	}
+
+	/**
+	 * 조합을 찾는 함수
+	 * @param visited
+	 * @param start
+	 * @param r
+	 */
+	static void comb(boolean[] visited, int start, int r) {
+		if (r == 0) {
+			cityDistance(visited);
+			return;
+		} else {
+			for (int i = start; i < store.size(); i++) {
+				visited[i] = true;
+				comb(visited, i + 1, r - 1);
+				visited[i] = false;
+			}
+		}
+	}
+	/**
+	 * 도시치킨거리를 구해서 최소값 찾는 함수
+	 * @param visited
+	 */
+	static void cityDistance(boolean[] visited) {
+		int sum = 0;
+		for(int r = 0; r < distance.length; r++) {
+			int minDistance = Integer.MAX_VALUE;
+			for(int c = 0; c < distance[0].length; c++) {
+				if(visited[c] && minDistance > distance[r][c]) {
+					minDistance = distance[r][c];
+				}
+			}
+			sum += minDistance;
+		}
+		if(sum < result) {
+			result = sum;
+		}
+	}
+
+	static int toInteger(String s) {
+		return Integer.parseInt(s);
+	}
+
+}
+
