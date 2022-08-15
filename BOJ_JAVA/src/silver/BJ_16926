@@ -1,0 +1,77 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class BJ_16926 {
+	static int N;
+	static int M;
+	static int R;
+	static int[][] area;
+
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		N = toInteger(st.nextToken());
+		M = toInteger(st.nextToken());
+		R = toInteger(st.nextToken());
+		area = new int[N][M];
+
+		// 배열에 넣어주기
+		for (int r = 0; r < N; r++) {
+			st = new StringTokenizer(br.readLine());
+			for (int c = 0; c < M; c++) {
+				area[r][c] = toInteger(st.nextToken());
+			}
+		}
+
+		for (int i = 0; i < R; i++) {
+			rotation();
+		}
+		print(area);
+	}
+
+	public static int toInteger(String s) {
+		return Integer.parseInt(s);
+	}
+
+	public static void rotation() {
+		int[][] areaR = new int[N][M];
+		// 아래로 가야 할 객체들
+		for (int c = 0; c <= M/2; c++) {
+			for (int r = c; r < N - c - 1; r++) {
+				areaR[r + 1][c] = area[r][c];
+			}
+		}
+
+		// 오른쪽으로 가야 할 객체들
+		for (int r = 0; r < N / 2; r++) {
+			for (int c = r; c < M - r - 1; c++) {
+				areaR[N - r - 1][c + 1] = area[N - r - 1][c];
+			}
+		}
+
+		// 위쪽으로 가야 할 객체들
+		for (int c = 0; c < M/2; c++) {
+			for (int r = N - c - 1; r > c; r--) {
+				areaR[r - 1][M - c - 1] = area[r][M - c - 1];
+			}
+		}
+
+		// 왼쪽으로 가야 할 객체들
+		for (int r = 0; r < N / 2; r++) {
+			for (int c = M - r - 1; c > r; c--) {
+				areaR[r][c - 1] = area[r][c];
+			}
+		}
+		area = areaR;
+	}
+
+	public static void print(int[][] area) {
+		for (int r = 0; r < N; r++) {
+			for (int c = 0; c < M; c++) {
+				System.out.print(area[r][c] + " ");
+			}
+			System.out.println();
+		}
+	}
+}
