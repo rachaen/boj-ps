@@ -1,0 +1,56 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class BJ_1987 {
+	static int[] dirR = { 0, 1, 0, -1 }; // 0 3 6 9시
+	static int[] dirC = { -1, 0, 1, 0 };
+
+	static int R;
+	static int C;
+	static char[][] map;
+	static int max = 0;
+	static int curR = 0;
+	static int curC = 0;
+	private static boolean[] alphabet;
+
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		R = Integer.parseInt(st.nextToken());
+		C = Integer.parseInt(st.nextToken());
+
+		map = new char[R][C];
+		for (int r = 0; r < R; r++) {
+			String s = br.readLine();
+			for (int c = 0; c < C; c++) {
+				map[r][c] = s.charAt(c);
+			}
+		}
+		alphabet = new boolean[26];
+		alphabet[map[0][0] - 'A'] = true;
+		move(0, 0, 1);
+		System.out.println(max);
+	}
+
+	static void move(int r, int c, int sum) {
+		for (int i = 0; i < 4; i++) {
+			if (canGo(r + dirR[i], c + dirC[i])) {
+				alphabet[map[r + dirR[i]][c + dirC[i]] - 'A'] = true;
+				move(r + dirR[i], c + dirC[i], sum+1);
+				alphabet[map[r + dirR[i]][c + dirC[i]] - 'A'] = false;
+			}
+		}
+		if(sum > max) {
+			max = sum;
+		}
+		
+	}
+
+	static boolean canGo(int r, int c) {
+		if (r >= R || r < 0 || c >= C || c < 0 || alphabet[map[r][c] - 'A']) {
+			return false;
+		}
+		return true;
+	}
+}
