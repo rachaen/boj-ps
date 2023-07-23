@@ -11,7 +11,7 @@ for (let i = 1; i <= N; i++) {
   arr.push(i);
 }
 
-let permArr = getPermutations(arr, N);
+let permArr = getPermutations2(arr, N);
 
 permArr.forEach((perm) => {
   console.log(perm.join(' '));
@@ -40,10 +40,10 @@ function getPermutations(arr, selectNumber) {
 function getPermutations2(arr, selectedNumber) {
   const result = [];
   const path = [];
-  const visited = Array(selectedNumber).fill(false);
+  const visited = Array(arr.length).fill(false);
 
   function dfs(depth) {
-    if (depth === N) {
+    if (depth === selectedNumber) {
       result.push([...path]);
       return;
     }
